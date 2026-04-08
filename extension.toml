@@ -1,0 +1,12 @@
+id = "apex"
+name = "Apex"
+version = "0.0.2"
+schema_version = 1
+authors = ["igorcguedes <igorcguedes@proton.me>", "jasonkradams <jason@jadams.pw>"]
+description = "Provides Apex syntax highlighting in Zed"
+repository = "https://github.com/jasonkradams/zed-apex"
+
+[grammars.apex]
+repository = "https://github.com/aheber/tree-sitter-sfapex.git"
+commit = "c88caa9bc9ae87f73d6c6055debb0d744b26a89d"
+path = "apex"

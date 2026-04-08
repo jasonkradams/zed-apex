@@ -1,321 +1,302 @@
-; CREDITS @maxbrunsfeld (maxbrunsfeld@gmail.com)
-; Variables
-(identifier) @variable
-
-; Methods
-(method_declaration
-  name: (identifier) @function.method)
-
-(method_invocation
-  name: (identifier) @function.method.call)
-
-(super) @function.builtin
-
-; Parameters
-(formal_parameter
-  name: (identifier) @variable.parameter)
-
-(catch_formal_parameter
-  name: (identifier) @variable.parameter)
-
-(spread_parameter
-  (variable_declarator
-    name: (identifier) @variable.parameter)) ; int... foo
-
-; Lambda parameter
-(inferred_parameters
-  (identifier) @variable.parameter) ; (x,y) -> ...
-
-(lambda_expression
-  parameters: (identifier) @variable.parameter) ; x -> ...
-
-; Operators
-[
-  "+"
-  ":"
-  "++"
-  "-"
-  "--"
-  "&"
-  "&&"
-  "|"
-  "||"
-  "!"
-  "!="
-  "=="
-  "*"
-  "/"
-  "%"
-  "<"
-  "<="
-  ">"
-  ">="
-  "="
-  "-="
-  "+="
-  "*="
-  "/="
-  "%="
-  "->"
-  "^"
-  "^="
-  "&="
-  "|="
-  "~"
-  ">>"
-  ">>>"
-  "<<"
-  "::"
-] @operator
-
-; Types
-(interface_declaration
-  name: (identifier) @type)
-
-(annotation_type_declaration
-  name: (identifier) @type)
-
-(class_declaration
-  name: (identifier) @type)
-
-(record_declaration
-  name: (identifier) @type)
-
-(enum_declaration
-  name: (identifier) @type)
-
-(constructor_declaration
-  name: (identifier) @type)
-
-(type_identifier) @type
-
-((type_identifier) @type.builtin
-  (#eq? @type.builtin "var"))
-
-((method_invocation
-  object: (identifier) @type)
-  (#lua-match? @type "^[A-Z]"))
-
-((method_reference
-  .
-  (identifier) @type)
-  (#lua-match? @type "^[A-Z]"))
-
-((field_access
-  object: (identifier) @type)
-  (#lua-match? @type "^[A-Z]"))
-
-(scoped_identifier
-  (identifier) @type
-  (#lua-match? @type "^[A-Z]"))
-
-; Fields
-(field_declaration
-  declarator:
-    (variable_declarator
-      name: (identifier) @variable.member))
-
-(field_access
-  field: (identifier) @variable.member)
-
-[
-  (boolean_type)
-  (integral_type)
-  (floating_point_type)
-  (void_type)
-] @type.builtin
-
-; Variables
-((identifier) @constant
-  (#lua-match? @constant "^[A-Z_][A-Z%d_]+$"))
-
-(this) @variable.builtin
-
-; Annotations
-(annotation
-  "@" @attribute
-  name: (identifier) @attribute)
-
-(marker_annotation
-  "@" @attribute
-  name: (identifier) @attribute)
-
-; Literals
-(string_literal) @string
-
-(escape_sequence) @string.escape
-
-(character_literal) @character
-
-[
-  (hex_integer_literal)
-  (decimal_integer_literal)
-  (octal_integer_literal)
-  (binary_integer_literal)
-] @number
-
-[
-  (decimal_floating_point_literal)
-  (hex_floating_point_literal)
-] @number.float
-
-[
-  (true)
-  (false)
-] @boolean
-
-(null_literal) @constant.builtin
-
-; Keywords
-[
-  "assert"
-  "class"
-  "record"
-  "default"
-  "enum"
-  "extends"
-  "implements"
-  "instanceof"
-  "interface"
-  "@interface"
-  "permits"
-  "to"
-  "with"
-] @keyword
-
-(synchronized_statement
-  "synchronized" @keyword)
-
-[
-  "abstract"
-  "final"
-  "native"
-  "non-sealed"
-  "open"
-  "private"
-  "protected"
-  "public"
-  "sealed"
-  "static"
-  "strictfp"
-  "transitive"
-] @type.qualifier
-
-(modifiers
-  "synchronized" @type.qualifier)
-
-[
-  "transient"
-  "volatile"
-] @keyword.storage
-
-[
-  "return"
-  "yield"
-] @keyword.return
-
-"new" @keyword.operator
-
-; Conditionals
-[
-  "if"
-  "else"
-  "switch"
-  "case"
-] @keyword.conditional
-
-(ternary_expression
-  [
-    "?"
-    ":"
-  ] @keyword.conditional.ternary)
-
-; Loops
-[
-  "for"
-  "while"
-  "do"
-  "continue"
-  "break"
-] @keyword.repeat
-
-; Includes
-[
-  "exports"
-  "import"
-  "module"
-  "opens"
-  "package"
-  "provides"
-  "requires"
-  "uses"
-] @keyword.import
-
-; Punctuation
-[
-  ";"
-  "."
-  "..."
-  ","
-] @punctuation.delimiter
-
-[
-  "{"
-  "}"
-] @punctuation.bracket
+;; attempting to match concepts represented here:
+;; https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide
 
 [
   "["
   "]"
-] @punctuation.bracket
+  "{"
+  "}"
+  "?"
+  ";"
+] @punctuation
+
+;; Methods
+
+(method_declaration
+  name: (identifier) @function.method)
+(method_declaration
+  type: (type_identifier) @type)
+
+(method_invocation
+  name: (identifier) @function.method)
+(argument_list
+  (identifier) @variable)
+(super) @function.builtin
+
+(explicit_constructor_invocation
+  arguments: (argument_list
+    (identifier) @variable ))
+
+;; Annotations
+
+(annotation
+  name: (identifier) @attribute)
+
+"@" @operator
+
+(annotation_key_value
+  (identifier) @variable)
+
+
+;; Types
+
+(interface_declaration
+  name: (identifier) @type.interface)
+(class_declaration
+  name: (identifier) @type)
+(class_declaration
+  (superclass) @type)
+(enum_declaration
+  name: (identifier) @type.enum)
+(enum_constant
+  name: (identifier) @constant)
+
+(interfaces
+  (type_list
+    (type_identifier) @type.interface ))
+
+(local_variable_declaration
+  (type_identifier) @type )
+
+( expression_statement (_ (identifier)) @variable)
+
+(type_arguments "<" @punctuation)
+(type_arguments ">" @punctuation)
+
+; (identifier) @variable
+
+((field_access
+  object: (identifier) @type)) ;; don't know what type of thing it is
+
+(generic_type
+  (type_identifier) @type)
+(type_arguments (type_identifier) @type)
+
+(field_access
+  field: (identifier) @property)
+
+((scoped_identifier
+  scope: (identifier) @type)
+ (#match? @type "^[A-Z]"))
+((method_invocation
+  object: (identifier) @type)
+ (#match? @type "^[A-Z]"))
+
+
+(field_declaration
+  type: (type_identifier) @type)
+
+(method_declaration
+  (formal_parameters
+    (formal_parameter
+      name: (identifier) @variable.parameter)))
+
+(formal_parameter
+  type: (type_identifier) @type
+  (identifier) @variable)
+
+(enhanced_for_statement
+  type: (type_identifier) @type
+  name: (identifier) @variable )
+
+(enhanced_for_statement
+  value: (identifier) @variable)
+
+(enhanced_for_statement
+  name: (identifier) @variable)
+
+(object_creation_expression
+  type: (type_identifier) @type)
+
+(array_creation_expression
+  type: (type_identifier) @type)
+
+(array_type
+  element: (type_identifier) @type)
+
+(catch_formal_parameter
+  (type_identifier) @type
+  name: (identifier) @variable)
+
+(return_statement
+  (identifier) @variable)
+
+(local_variable_declaration
+  (variable_declarator
+    name: (identifier) @variable ))
+
+(for_statement
+  condition: (binary_expression
+    (identifier) @variable))
+
+(for_statement
+  update: (update_expression
+    (identifier) @variable))
+
+(constructor_declaration
+  name: (identifier) @type)
+
+(dml_type) @function.builtin
+
+(bound_apex_expression
+  (identifier) @variable)
+
+(assignment_operator) @operator
+
+(update_expression ["++" "--"] @operator)
+
+(instanceof_expression
+  left: (identifier) @variable
+  right: (type_identifier) @type )
+
+(cast_expression
+  type: (type_identifier) @type
+  value: (identifier) @variable)
+
+(switch_expression
+  condition: (identifier) @variable)
+
+(switch_label
+  (type_identifier) @type
+  (identifier) @variable )
+
+(switch_rule
+  (switch_label
+    (identifier) @constant ))
+
+(trigger_declaration
+  name: (identifier) @type
+  object: (identifier) @type
+  (trigger_event) @keyword
+  ("," (trigger_event) @keyword)*)
+
+(binary_expression
+  operator: [
+    ">"
+    "<"
+    ">="
+    "<="
+    "=="
+    "==="
+    "!="
+    "!=="
+    "&&"
+    "||"
+    "+"
+    "-"
+    "*"
+    "/"
+    "&"
+    "|"
+    "^"
+    "%"
+    "<<"
+    ">>"
+    ">>>"] @operator)
+
+(binary_expression
+  (identifier) @variable)
+
+(unary_expression
+  operator: [
+    "+"
+    "-"
+    "!"
+    "~"
+  ]) @operator
+
+(map_initializer "=>" @operator)
 
 [
-  "("
-  ")"
-] @punctuation.bracket
+  (boolean_type)
+  (void_type)
+] @type.builtin
 
-(type_arguments
-  [
-    "<"
-    ">"
-  ] @punctuation.bracket)
+; Variables
 
-(type_parameters
-  [
-    "<"
-    ">"
-  ] @punctuation.bracket)
+(field_declaration
+  (modifiers (modifier ["final" "static"])(modifier ["final" "static"]))
+  (variable_declarator
+    name: (identifier) @constant))
 
-(string_interpolation
-  [
-    "\\{"
-    "}"
-  ] @punctuation.special)
+(variable_declarator
+  (identifier) @property)
 
-; Exceptions
+;; because itendifying it when declared doesn't carry to use
+;; leans on the convention that "screaming snake case" is a const
+((identifier) @constant
+  (#match? @constant "^_*[A-Z][A-Z\\d_]+$"))
+
+
+(this) @variable.builtin
+
+; Literals
+
 [
-  "throw"
-  "throws"
-  "finally"
-  "try"
-  "catch"
-] @keyword.exception
+  (int)
+] @number
 
-; Labels
-(labeled_statement
-  (identifier) @label)
+[
+  (string_literal)
+] @string
 
-; Comments
 [
   (line_comment)
   (block_comment)
-] @comment @spell
+] @comment
 
-((block_comment) @comment.documentation
-  (#lua-match? @comment.documentation "^/[*][*][^*].*[*]/$"))
+;; ;; Keywords
 
-((line_comment) @comment.documentation
-  (#lua-match? @comment.documentation "^///[^/]"))
+[
+  "abstract"
+  "break"
+  "catch"
+  "class"
+  "continue"
+  "default"
+  "do"
+  "else"
+  "enum"
+  "extends"
+  "final"
+  "finally"
+  "for"
+  "get"
+  "global"
+  "if"
+  "implements"
+  "instanceof"
+  "interface"
+  "new"
+  "on"
+  "private"
+  "protected"
+  "public"
+  "return"
+  "set"
+  "static"
+  "switch"
+  "testMethod"
+  "throw"
+  "transient"
+  "try"
+  "trigger"
+  "virtual"
+  "when"
+  "while"
+  "with_sharing"
+  "without_sharing"
+  "inherited_sharing"
+] @keyword
 
-((line_comment) @comment.documentation
-  (#lua-match? @comment.documentation "^///$"))
+(assignment_expression
+  left: (identifier) @variable)
+
+; (type_identifier) @type ;; not respecting precedence...
+;; I don't love this but couldn't break them up right now
+;; can't figure out how to let that be special without conflicting
+;; in the grammar
+"System.runAs" @function.builtin
+
+(scoped_type_identifier
+  (type_identifier) @type)
