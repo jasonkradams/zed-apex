@@ -1,0 +1,14 @@
+SELECT Id FROM Account WHERE Id IN (SELECT AccountId FROM Contact)
+/// <- keyword
+///       ^^ property
+///          ^^^^ keyword
+///               ^^^^^^^ type
+///                       ^^^^^ keyword
+///                             ^^ property
+///                                ^^ operator
+///                                   <- punctuation
+///                                    ^^^^^^ keyword
+///                                           ^^^^^^^^^ property
+///                                                     ^^^^ keyword
+///                                                          ^^^^^^^ type
+///                                                                 <- punctuation

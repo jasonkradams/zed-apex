@@ -1,0 +1,12 @@
+{
+  "name": "zed-apex",
+  "version": "0.0.2",
+  "private": true,
+  "scripts": {
+    "test": "node tests/run-tests.js"
+  },
+  "devDependencies": {
+    "tree-sitter": "^0.22.4",
+    "tree-sitter-sfapex": "^2.4.1"
+  }
+}

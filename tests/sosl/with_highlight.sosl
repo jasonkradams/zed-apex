@@ -1,0 +1,8 @@
+FIND {keyword} IN NAME FIELDS RETURNING Lead WITH HIGHLIGHT
+/// <- keyword
+///      ^^^^^^^ string
+///               ^^ keyword
+///                  ^^^^ keyword
+///                              ^^^^^^^^^ keyword
+///                                        ^^^^ type
+///                                                  ^^^^^^^^^ keyword

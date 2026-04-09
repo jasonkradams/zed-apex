@@ -1,0 +1,13 @@
+SELECT Type, COUNT(Id) FROM Account HAVING COUNT(Id) > 5
+/// <- keyword
+///       ^^^^ property
+///           <- punctuation
+///             ^^^^^ function
+///                  <- punctuation
+///                   ^^ property
+///                     <- punctuation
+///                       ^^^^ keyword
+///                            ^^^^^^^ type
+///                                                <- punctuation
+///                                                   <- punctuation
+///                                                       <- number
