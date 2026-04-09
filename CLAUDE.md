@@ -38,3 +38,12 @@ node -e "const s = require('tree-sitter-sfapex'); console.log(s.apex.nodeTypeInf
 - `highlights.scm` must be a single merged file per language. Zed does not support multi-file highlight queries like tree-sitter's `inherits` mechanism. For SOQL and SOSL, upstream queries are combined into one file.
 - `brackets.scm` node types must exist in the grammar. The SOQL and SOSL grammars only have `(` and `)` as punctuation nodes — no `[]` or `{}`.
 - `config.toml` bracket entries control editor auto-close behavior and are independent of `brackets.scm` grammar node types.
+
+## Git and issue workflow
+
+- Use atomic, conventional commits (`feat:`, `fix:`, `test:`, `docs:`, etc.)
+- Create feature branches named `feat/<description>` or `fix/<description>`
+- PRs should reference issues with `Closes #N` in the body
+- Assign PRs and issues to `jasonkradams`
+- Apply relevant labels from: `enhancement`, `grammar`, `lsp`, `bug`, `documentation`
+- Merge PRs with `--merge --delete-branch`
