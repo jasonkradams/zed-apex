@@ -114,9 +114,6 @@
 (array_type
   element: (type_identifier) @type)
 
-(catch_formal_parameter
-  (type_identifier) @type
-  name: (identifier) @variable)
 
 (return_statement
   (identifier) @variable)
@@ -143,7 +140,8 @@
 
 (assignment_operator) @operator
 
-(update_expression ["++" "--"] @operator)
+(update_expression
+  operator: (update_operator) @operator)
 
 (instanceof_expression
   left: (identifier) @variable
@@ -157,12 +155,12 @@
   condition: (identifier) @variable)
 
 (switch_label
-  (type_identifier) @type
-  (identifier) @variable )
+  (when_sobject_type
+    (type_identifier) @type
+    (identifier) @variable))
 
-(switch_rule
-  (switch_label
-    (identifier) @constant ))
+(switch_label
+  (identifier) @constant)
 
 (trigger_declaration
   name: (identifier) @type
@@ -205,7 +203,7 @@
     "~"
   ]) @operator
 
-(map_initializer "=>" @operator)
+(map_key_initializer "=>" @operator)
 
 [
   (boolean_type)
@@ -215,7 +213,7 @@
 ; Variables
 
 (field_declaration
-  (modifiers (modifier ["final" "static"])(modifier ["final" "static"]))
+  (modifiers (modifier [(final) (static)])(modifier [(final) (static)]))
   (variable_declarator
     name: (identifier) @constant))
 
@@ -253,7 +251,6 @@
   "catch"
   "class"
   "continue"
-  "default"
   "do"
   "else"
   "enum"

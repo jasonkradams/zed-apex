@@ -8,5 +8,15 @@ repository = "https://github.com/jasonkradams/zed-apex"
 
 [grammars.apex]
 repository = "https://github.com/aheber/tree-sitter-sfapex.git"
-commit = "c88caa9bc9ae87f73d6c6055debb0d744b26a89d"
+commit = "3597575a429766dd7ecce9f5bb97f6fec4419d5d"
 path = "apex"
+
+[grammars.soql]
+repository = "https://github.com/aheber/tree-sitter-sfapex.git"
+commit = "3597575a429766dd7ecce9f5bb97f6fec4419d5d"
+path = "soql"
+
+[grammars.sosl]
+repository = "https://github.com/aheber/tree-sitter-sfapex.git"
+commit = "3597575a429766dd7ecce9f5bb97f6fec4419d5d"
+path = "sosl"
