@@ -151,16 +151,124 @@ function validateQueries() {
   return allOk;
 }
 
+// Validate that injections.scm captures the correct node types and
+// associates each with the right injection language label.
+//
+// For each .cls file in tests/apex/, a header comment declares the
+// expected injections in the form:
+//   // @inject <nodeType> <language>
+//
+// The test parses the source with the apex grammar, runs the
+// injections.scm query, and checks that every declared injection
+// appears in the captures (matched by node type and language label).
+function validateInjections() {
+  const injectionsPath = path.join(ROOT, 'languages/apex/injections.scm');
+  if (!fs.existsSync(injectionsPath)) {
+    console.error('  FAIL  injections.scm not found');
+    return false;
+  }
+
+  const injectionsSrc = fs.readFileSync(injectionsPath, 'utf8');
+  const parser = new Parser();
+  parser.setLanguage(sfapex.apex);
+
+  let query;
+  try {
+    query = new Query(sfapex.apex, injectionsSrc);
+  } catch (e) {
+    console.error(`  FAIL  injections.scm failed to compile: ${e.message}`);
+    return false;
+  }
+
+  const testDir = path.join(__dirname, 'apex');
+  if (!fs.existsSync(testDir)) {
+    console.warn('  WARNING: No tests/apex/ directory found');
+    return true;
+  }
+
+  const files = fs.readdirSync(testDir).filter(f => f.endsWith('.cls')).sort();
+  if (files.length === 0) {
+    console.warn('  WARNING: No .cls test files found in tests/apex/');
+    return true;
+  }
+
+  let allOk = true;
+
+  for (const file of files) {
+    const fullPath = path.join(testDir, file);
+    const content = fs.readFileSync(fullPath, 'utf8');
+
+    // Parse expected injections from header comments: // @inject <nodeType> <language>
+    const expected = [];
+    for (const line of content.split('\n')) {
+      const m = line.match(/^\/\/\s*@inject\s+(\S+)\s+(\S+)/);
+      if (m) expected.push({ nodeType: m[1], language: m[2] });
+    }
+
+    if (expected.length === 0) {
+      console.warn(`  WARNING: ${file} has no // @inject declarations`);
+      continue;
+    }
+
+    const tree = parser.parse(content);
+    const matches = query.matches(tree.rootNode);
+
+    // Collect (nodeType, language) pairs from all injection.content captures.
+    // node-tree-sitter exposes #set! properties as match.setProperties.
+    const actual = [];
+    for (const match of matches) {
+      const contentCapture = match.captures.find(c => c.name === 'injection.content');
+      if (!contentCapture) continue;
+
+      const nodeType = contentCapture.node.type;
+      const language = (match.setProperties && match.setProperties['injection.language']) || null;
+
+      actual.push({ nodeType, language });
+    }
+
+    let filePassed = 0;
+    let fileFailed = 0;
+
+    for (const exp of expected) {
+      const found = actual.some(a => a.nodeType === exp.nodeType && a.language === exp.language);
+      if (found) {
+        filePassed++;
+      } else {
+        fileFailed++;
+        allOk = false;
+        console.error(`  FAIL  ${file}: expected injection { nodeType: '${exp.nodeType}', language: '${exp.language}' }`);
+        if (actual.length > 0) {
+          console.error(`        actual injections: ${JSON.stringify(actual)}`);
+        } else {
+          console.error('        actual injections: (none)');
+        }
+      }
+    }
+
+    const status = fileFailed === 0 ? 'PASS' : 'FAIL';
+    console.log(`  ${status}  ${file} (${filePassed}/${filePassed + fileFailed})`);
+  }
+
+  return allOk;
+}
+
 let ok = validateQueries();
 
+const apexHighlights = fs.readFileSync(path.join(ROOT, 'languages/apex/highlights.scm'), 'utf8');
 const soqlHighlights = fs.readFileSync(path.join(ROOT, 'languages/soql/highlights.scm'), 'utf8');
 const soslHighlights = fs.readFileSync(path.join(ROOT, 'languages/sosl/highlights.scm'), 'utf8');
+
+console.log('\n=== Apex Highlight Tests ===');
+ok = runSuite(sfapex.apex, apexHighlights, path.join(__dirname, 'apex'), '.cls') && ok;
 
 console.log('\n=== SOQL Highlight Tests ===');
 ok = runSuite(sfapex.soql, soqlHighlights, path.join(__dirname, 'soql'), '.soql') && ok;
 
 console.log('\n=== SOSL Highlight Tests ===');
 ok = runSuite(sfapex.sosl, soslHighlights, path.join(__dirname, 'sosl'), '.sosl') && ok;
+
+console.log('\n=== Apex Injection Tests ===');
+ok = validateInjections() && ok;
 
 console.log(ok ? '\nAll tests passed.' : '\nTest failures detected.');
 process.exit(ok ? 0 : 1);
