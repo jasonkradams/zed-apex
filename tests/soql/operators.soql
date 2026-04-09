@@ -1,0 +1,13 @@
+SELECT Id FROM Lead WHERE Revenue > 1000 AND Score LIKE 'A%'
+/// <- keyword
+///       ^^ property
+///          ^^^^ keyword
+///               ^^^^ type
+///                    ^^^^^ keyword
+///                          ^^^^^^^ property
+///                                  <- operator
+///                                    ^^^^ number
+///                                         ^^^ operator
+///                                             ^^^^^ property
+///                                                   ^^^^ operator
+///                                                        ^^^^ string

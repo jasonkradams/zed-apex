@@ -1,0 +1,15 @@
+FIND {Test} RETURNING Account(Name, Phone), Contact(Email)
+/// <- keyword
+///      ^^^^ string
+///            ^^^^^^^^^ keyword
+///                      ^^^^^^^ type
+///                             <- punctuation
+///                              ^^^^ property
+///                                  <- punctuation
+///                                    ^^^^^ property
+///                                         <- punctuation
+///                                          <- punctuation
+///                                            ^^^^^^^ type
+///                                                   <- punctuation
+///                                                    ^^^^^ property
+///                                                         <- punctuation

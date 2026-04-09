@@ -1,0 +1,13 @@
+SELECT Id FROM Account WHERE Amount > 1000.50 AND Name = 'Acme Corp'
+/// <- keyword
+///       ^^ property
+///          ^^^^ keyword
+///               ^^^^^^^ type
+///                       ^^^^^ keyword
+///                             ^^^^^^ property
+///                                    <- operator
+///                                      ^^^^^^^ number
+///                                              ^^^ operator
+///                                                  ^^^^ property
+///                                                       <- operator
+///                                                         ^^^^^^^^^^^ string

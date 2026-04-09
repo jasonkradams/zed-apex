@@ -1,0 +1,13 @@
+SELECT TYPEOF What WHEN Account THEN Name ELSE Subject END FROM Task
+/// <- keyword
+///       ^^^^^^ keyword
+///              ^^^^ property
+///                   ^^^^ keyword
+///                        ^^^^^^^ type
+///                                ^^^^ keyword
+///                                     ^^^^ property
+///                                          ^^^^ keyword
+///                                               ^^^^^^^ property
+///                                                       ^^^ keyword
+///                                                           ^^^^ keyword
+///                                                                ^^^^ type

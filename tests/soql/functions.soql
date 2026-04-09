@@ -1,0 +1,14 @@
+SELECT Count(Id), AVG(Amount) avg FROM Opportunity
+/// <- keyword
+///       ^^^^^ function
+///            <- punctuation
+///             ^^ property
+///               <- punctuation
+///                <- punctuation
+///                  ^^^ function
+///                     <- punctuation
+///                      ^^^^^^ property
+///                            <- punctuation
+///                              ^^^ label
+///                                  ^^^^ keyword
+///                                       ^^^^^^^^^^^ type

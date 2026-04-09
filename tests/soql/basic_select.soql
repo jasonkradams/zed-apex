@@ -1,0 +1,7 @@
+SELECT Id, Name FROM Account
+/// <- keyword
+///       ^^ property
+///         <- punctuation
+///           ^^^^ property
+///                ^^^^ keyword
+///                     ^^^^^^^ type

@@ -1,0 +1,13 @@
+SELECT Id FROM Contact WHERE Name = 'Acme' AND Phone != null
+/// <- keyword
+///       ^^ property
+///          ^^^^ keyword
+///               ^^^^^^^ type
+///                       ^^^^^ keyword
+///                             ^^^^ property
+///                                  <- operator
+///                                    ^^^^^^ string
+///                                           ^^^ operator
+///                                               ^^^^^ property
+///                                                     ^^ operator
+///                                                        ^^^^ constant.builtin

@@ -1,0 +1,8 @@
+FIND {test} RETURNING Account WITH METADATA = 'labels'
+/// <- keyword
+///      ^^^^ string
+///            ^^^^^^^^^ keyword
+///                      ^^^^^^^ type
+///                                   ^^^^^^^^ keyword
+///                                            <- operator
+///                                              ^^^^^^^^ string

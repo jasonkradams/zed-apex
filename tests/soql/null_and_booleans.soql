@@ -1,0 +1,17 @@
+SELECT Id FROM Account WHERE Active__c = true AND Deleted = false AND Name != null
+/// <- keyword
+///       ^^ property
+///          ^^^^ keyword
+///               ^^^^^^^ type
+///                       ^^^^^ keyword
+///                             ^^^^^^^^^ property
+///                                       <- operator
+///                                         ^^^^ constant.builtin
+///                                              ^^^ operator
+///                                                  ^^^^^^^ property
+///                                                          <- operator
+///                                                            ^^^^^ constant.builtin
+///                                                                  ^^^ operator
+///                                                                      ^^^^ property
+///                                                                           ^^ operator
+///                                                                              ^^^^ constant.builtin

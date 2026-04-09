@@ -1,0 +1,7 @@
+FIND {Acme} IN ALL FIELDS RETURNING Account
+/// <- keyword
+///      ^^^^ string
+///            ^^ keyword
+///               ^^^ keyword
+///                          ^^^^^^^^^ keyword
+///                                    ^^^^^^^ type
