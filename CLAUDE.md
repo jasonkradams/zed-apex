@@ -30,7 +30,11 @@ When updating the grammar commit in `extension.toml`, node types can change betw
 After bumping, run `npm test`. The query compilation check will catch invalid node types. To diagnose failures, inspect grammar node types:
 
 ```js
+# Look up a specific node
 node -e "const s = require('tree-sitter-sfapex'); console.log(s.apex.nodeTypeInfo.find(n => n.type === 'some_node'))"
+
+# List all named node types (useful when writing new .scm files)
+node -e "const s = require('tree-sitter-sfapex'); console.log(s.apex.nodeTypeInfo.filter(n => n.named).map(n => n.type).join('\n'))"
 ```
 
 ## Zed extension specifics
@@ -38,6 +42,8 @@ node -e "const s = require('tree-sitter-sfapex'); console.log(s.apex.nodeTypeInf
 - `highlights.scm` must be a single merged file per language. Zed does not support multi-file highlight queries like tree-sitter's `inherits` mechanism. For SOQL and SOSL, upstream queries are combined into one file.
 - `brackets.scm` node types must exist in the grammar. The SOQL and SOSL grammars only have `(` and `)` as punctuation nodes — no `[]` or `{}`.
 - `config.toml` bracket entries control editor auto-close behavior and are independent of `brackets.scm` grammar node types.
+- `folds.scm` uses `@fold` captures on named node types (e.g. `(class_body) @fold`). The query compilation test validates it automatically since it covers all `.scm` files under `languages/*/`.
+- `indents.scm` uses `@indent` and `@end` captures. The pattern `(_ "{" "}" @end) @indent` matches any node delimited by braces without naming the node type explicitly.
 
 ## Git and issue workflow
 
