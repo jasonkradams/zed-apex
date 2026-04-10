@@ -1,3 +1,9 @@
+; Apex outline and symbol captures for Zed
+;
+; Only @definition.* captures are included — @reference.* captures for call
+; sites and local variables produce too much noise in the Outline panel and
+; symbol search without an LSP to make them actionable.
+
 (class_declaration
   name: (identifier) @name) @definition.class
 
@@ -7,18 +13,14 @@
 (enum_declaration
   name: (identifier) @name) @definition.enum
 
-(method_invocation
-  name: (identifier) @name) @reference.call
+(enum_constant
+  name: (identifier) @name) @definition.constant
+
+(trigger_declaration
+  name: (identifier) @name) @definition.type
+
+(constructor_declaration
+  name: (identifier) @name) @definition.method
 
 (method_declaration
   name: (identifier) @name) @definition.method
-
-(interfaces
-  (type_list
-    (type_identifier ) @name)) @reference.implementation
-
-(local_variable_declaration
-  (type_identifier) @name ) @reference.class
-
-(object_creation_expression
-  type: (type_identifier) @name) @reference.class
