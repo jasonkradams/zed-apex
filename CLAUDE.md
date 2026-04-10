@@ -44,6 +44,7 @@ node -e "const s = require('tree-sitter-sfapex'); console.log(s.apex.nodeTypeInf
 - `config.toml` bracket entries control editor auto-close behavior and are independent of `brackets.scm` grammar node types.
 - `folds.scm` uses `@fold` captures on named node types (e.g. `(class_body) @fold`). The query compilation test validates it automatically since it covers all `.scm` files under `languages/*/`.
 - `indents.scm` uses `@indent` and `@end` captures. The pattern `(_ "{" "}" @end) @indent` matches any node delimited by braces without naming the node type explicitly.
+- `tags.scm` should only include `@definition.*` captures for the Outline panel and symbol search. `@reference.*` captures for call sites, local variables, and object creation flood the outline with noise and are only useful with an LSP (which this extension does not provide).
 
 ## Git and issue workflow
 
