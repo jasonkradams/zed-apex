@@ -252,6 +252,150 @@ function validateInjections() {
   return allOk;
 }
 
+// Validate snippet JSON files referenced in extension.toml.
+//
+// Checks:
+//   - JSON parses successfully
+//   - Every snippet has a string `prefix` and a string-array `body`
+//   - All prefixes are unique across the file
+//   - Tab stop $0 (final cursor) is present in the body
+//   - Tab stop numbering has no gaps (e.g. $1, $3 without $2)
+//   - Placeholder/choice syntax is well-formed:
+//       ${N:default}, ${N|a,b,c|}, plain $N
+function validateSnippets() {
+  const tomlPath = path.join(ROOT, 'extension.toml');
+  if (!fs.existsSync(tomlPath)) {
+    console.warn('  WARNING: extension.toml not found, skipping snippet validation');
+    return true;
+  }
+
+  const toml = fs.readFileSync(tomlPath, 'utf8');
+  const snippetPaths = [];
+  const snippetMatch = toml.match(/^snippets\s*=\s*\[([^\]]*)\]/m);
+  if (!snippetMatch) {
+    console.log('  SKIP  No snippets field in extension.toml');
+    return true;
+  }
+
+  // Extract quoted paths from the TOML array
+  const pathPattern = /"([^"]+)"/g;
+  let m;
+  while ((m = pathPattern.exec(snippetMatch[1])) !== null) {
+    snippetPaths.push(m[1]);
+  }
+
+  if (snippetPaths.length === 0) {
+    console.log('  SKIP  snippets array is empty');
+    return true;
+  }
+
+  let allOk = true;
+
+  for (const relPath of snippetPaths) {
+    const absPath = path.join(ROOT, relPath.replace(/^\.\//, ''));
+    const label = relPath.replace(/^\.\//, '');
+
+    if (!fs.existsSync(absPath)) {
+      console.error(`  FAIL  ${label}: file not found`);
+      allOk = false;
+      continue;
+    }
+
+    // Parse JSON
+    let snippets;
+    try {
+      snippets = JSON.parse(fs.readFileSync(absPath, 'utf8'));
+    } catch (e) {
+      console.error(`  FAIL  ${label}: invalid JSON — ${e.message}`);
+      allOk = false;
+      continue;
+    }
+
+    const entries = Object.entries(snippets);
+    const prefixSeen = new Map(); // prefix -> snippet name
+    let fileOk = true;
+    let checked = 0;
+
+    for (const [name, snippet] of entries) {
+      checked++;
+      const errors = [];
+
+      // Required fields
+      if (typeof snippet.prefix !== 'string' || snippet.prefix.length === 0) {
+        errors.push('prefix must be a non-empty string');
+      }
+
+      if (!Array.isArray(snippet.body) || snippet.body.length === 0) {
+        errors.push('body must be a non-empty array');
+      } else if (!snippet.body.every(line => typeof line === 'string')) {
+        errors.push('body array must contain only strings');
+      }
+
+      // Unique prefix
+      if (typeof snippet.prefix === 'string') {
+        if (prefixSeen.has(snippet.prefix)) {
+          errors.push(`duplicate prefix "${snippet.prefix}" (also used by "${prefixSeen.get(snippet.prefix)}")`);
+        }
+        prefixSeen.set(snippet.prefix, name);
+      }
+
+      // Body analysis
+      if (Array.isArray(snippet.body) && snippet.body.every(l => typeof l === 'string')) {
+        const joined = snippet.body.join('\n');
+
+        // Check for $0 final cursor on multi-line snippets where
+        // the final position is ambiguous. Single-line snippets
+        // implicitly end at the last tab stop.
+        const isMultiLine = snippet.body.length > 1;
+        if (isMultiLine && !/\$0(?!\d)/.test(joined) && !/\$\{0[}:]/.test(joined)) {
+          errors.push('missing $0 (final cursor position) in multi-line snippet');
+        }
+
+        // Collect all tab stop numbers
+        const tabStops = new Set();
+        // Match $N, ${N:...}, ${N|...|} patterns
+        const tabStopPattern = /\$(\d+)|\$\{(\d+)[:|]/g;
+        let tsMatch;
+        while ((tsMatch = tabStopPattern.exec(joined)) !== null) {
+          tabStops.add(parseInt(tsMatch[1] ?? tsMatch[2], 10));
+        }
+
+        // Check for gaps (excluding 0)
+        if (tabStops.size > 1) {
+          const numbered = [...tabStops].filter(n => n > 0).sort((a, b) => a - b);
+          for (let i = 0; i < numbered.length; i++) {
+            if (numbered[i] !== i + 1) {
+              errors.push(`tab stop gap: have ${numbered.join(',')} but missing $${i + 1}`);
+              break;
+            }
+          }
+        }
+
+        // Validate placeholder/choice syntax — look for unclosed ${ patterns
+        const openBraces = (joined.match(/\$\{/g) || []).length;
+        const closeBraces = (joined.match(/\}/g) || []).length;
+        // Braces in code (like class bodies) are also counted, so only flag if opens exceed closes
+        if (openBraces > closeBraces) {
+          errors.push(`unclosed placeholder: ${openBraces} \${ but only ${closeBraces} }`);
+        }
+      }
+
+      if (errors.length > 0) {
+        fileOk = false;
+        allOk = false;
+        for (const err of errors) {
+          console.error(`  FAIL  ${label} → "${name}": ${err}`);
+        }
+      }
+    }
+
+    const status = fileOk ? 'PASS' : 'FAIL';
+    console.log(`  ${status}  ${label} (${checked} snippets)`);
+  }
+
+  return allOk;
+}
+
 let ok = validateQueries();
 
 const apexHighlights = fs.readFileSync(path.join(ROOT, 'languages/apex/highlights.scm'), 'utf8');
@@ -269,6 +413,9 @@ ok = runSuite(sfapex.sosl, soslHighlights, path.join(__dirname, 'sosl'), '.sosl'
 
 console.log('\n=== Apex Injection Tests ===');
 ok = validateInjections() && ok;
+
+console.log('\n=== Snippet Validation ===');
+ok = validateSnippets() && ok;
 
 console.log(ok ? '\nAll tests passed.' : '\nTest failures detected.');
 process.exit(ok ? 0 : 1);
