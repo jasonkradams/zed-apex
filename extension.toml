@@ -1,11 +1,15 @@
 id = "apex"
 name = "Apex"
-version = "0.0.3"
+version = "0.0.4"
 schema_version = 1
 authors = ["igorcguedes <igorcguedes@proton.me>", "jasonkradams <jason@jadams.pw>"]
 description = "Provides Apex syntax highlighting in Zed"
 repository = "https://github.com/jasonkradams/zed-apex"
 snippets = ["./snippets/apex.json"]
+
+[language_servers.apex-jorje-lsp]
+name = "Apex Language Server"
+language = "Apex"
 
 [grammars.apex]
 repository = "https://github.com/aheber/tree-sitter-sfapex.git"
@@ -21,3 +25,8 @@ path = "soql"
 repository = "https://github.com/aheber/tree-sitter-sfapex.git"
 commit = "3597575a429766dd7ecce9f5bb97f6fec4419d5d"
 path = "sosl"
+
+[[capabilities]]
+kind = "process:exec"
+command = "*"
+args = ["-version"]
