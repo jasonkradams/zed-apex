@@ -5,6 +5,7 @@ schema_version = 1
 authors = ["igorcguedes <igorcguedes@proton.me>", "jasonkradams <jason@jadams.pw>"]
 description = "Provides Apex syntax highlighting in Zed"
 repository = "https://github.com/jasonkradams/zed-apex"
+snippets = ["./snippets/apex.json"]
 
 [grammars.apex]
 repository = "https://github.com/aheber/tree-sitter-sfapex.git"

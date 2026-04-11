@@ -1,0 +1,469 @@
+{
+    "Class": {
+        "prefix": "class",
+        "body": [
+            "${1|global,public,private|} ${2|with sharing,without sharing,inherited sharing|} class ${3:MyClass} {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Class declaration"
+    },
+    "Interface": {
+        "prefix": "interface",
+        "body": [
+            "${1|global,public,private|} interface ${2:MyInterface} {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Interface declaration"
+    },
+    "Enum": {
+        "prefix": "enum",
+        "body": [
+            "${1|global,public,private|} enum ${2:MyEnum} {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Enum declaration"
+    },
+    "Custom Exception": {
+        "prefix": "customException",
+        "body": [
+            "${1|global,public,private|} class ${2:MyException} extends Exception {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Custom exception class"
+    },
+    "Trigger": {
+        "prefix": "trigger",
+        "body": [
+            "trigger ${1:TriggerName} on ${2:SObject} (${3|before insert,before update,before delete,after insert,after update,after delete,after undelete|}) {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Trigger declaration"
+    },
+    "Constructor": {
+        "prefix": "constructor",
+        "body": [
+            "${1|public,private,global|} ${2:ClassName}($3) {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Constructor"
+    },
+    "Method": {
+        "prefix": "method",
+        "body": [
+            "${1|public,private,global|} ${2:void} ${3:methodName}($4) {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Instance method"
+    },
+    "Static Method": {
+        "prefix": "staticmethod",
+        "body": [
+            "${1|public,private,global|} static ${2:void} ${3:methodName}($4) {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Static method"
+    },
+    "Property": {
+        "prefix": "prop",
+        "body": [
+            "${1|public,private,global|} ${2:String} ${3:propertyName} { get; set; }"
+        ],
+        "description": "Property with getter and setter"
+    },
+    "Field": {
+        "prefix": "field",
+        "body": [
+            "${1|private,public,global|} ${2:String} ${3:fieldName};"
+        ],
+        "description": "Field declaration"
+    },
+    "If": {
+        "prefix": "if",
+        "body": [
+            "if (${1:condition}) {",
+            "\t$0",
+            "}"
+        ],
+        "description": "If statement"
+    },
+    "If Else": {
+        "prefix": "ifelse",
+        "body": [
+            "if (${1:condition}) {",
+            "\t$2",
+            "} else {",
+            "\t$0",
+            "}"
+        ],
+        "description": "If/else statement"
+    },
+    "If Null": {
+        "prefix": "ifnull",
+        "body": [
+            "if (${1:variable} == null) {",
+            "\t$0",
+            "}"
+        ],
+        "description": "If null check"
+    },
+    "If Not Null": {
+        "prefix": "ifnotnull",
+        "body": [
+            "if (${1:variable} != null) {",
+            "\t$0",
+            "}"
+        ],
+        "description": "If not null check"
+    },
+    "Switch": {
+        "prefix": "switch",
+        "body": [
+            "switch on ${1:expression} {",
+            "\twhen ${2:value} {",
+            "\t\t$3",
+            "\t}",
+            "\twhen else {",
+            "\t\t$0",
+            "\t}",
+            "}"
+        ],
+        "description": "Switch statement"
+    },
+    "Ternary": {
+        "prefix": "ter",
+        "body": [
+            "${1:condition} ? ${2:exprIfTrue} : ${3:exprIfFalse}"
+        ],
+        "description": "Ternary expression"
+    },
+    "For Each": {
+        "prefix": "for",
+        "body": [
+            "for (${1:Type} ${2:item} : ${3:collection}) {",
+            "\t$0",
+            "}"
+        ],
+        "description": "For-each loop"
+    },
+    "For Indexed": {
+        "prefix": "fori",
+        "body": [
+            "for (Integer ${1:i} = 0; ${1:i} < ${2:size}; ${1:i}++) {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Indexed for loop"
+    },
+    "For Reverse": {
+        "prefix": "forr",
+        "body": [
+            "for (Integer ${1:i} = ${2:size} - 1; ${1:i} >= 0; ${1:i}--) {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Reverse for loop"
+    },
+    "For SOQL": {
+        "prefix": "fors",
+        "body": [
+            "for (${1:SObject} ${2:record} : [SELECT ${3:fields} FROM ${1:SObject}]) {",
+            "\t$0",
+            "}"
+        ],
+        "description": "For loop over SOQL query"
+    },
+    "For Map": {
+        "prefix": "formap",
+        "body": [
+            "for (${1:KeyType} ${2:key} : ${3:mapName}.keySet()) {",
+            "\t${4:ValueType} ${5:value} = ${3:mapName}.get(${2:key});",
+            "\t$0",
+            "}"
+        ],
+        "description": "For loop over map entries"
+    },
+    "While": {
+        "prefix": "while",
+        "body": [
+            "while (${1:condition}) {",
+            "\t$0",
+            "}"
+        ],
+        "description": "While loop"
+    },
+    "Do While": {
+        "prefix": "do",
+        "body": [
+            "do {",
+            "\t$0",
+            "} while (${1:condition});"
+        ],
+        "description": "Do-while loop"
+    },
+    "List": {
+        "prefix": "List",
+        "body": [
+            "List<${1:Type}> ${2:listName} = new List<${1:Type}>();"
+        ],
+        "description": "New List"
+    },
+    "Map": {
+        "prefix": "Map",
+        "body": [
+            "Map<${1:KeyType}, ${2:ValueType}> ${3:mapName} = new Map<${1:KeyType}, ${2:ValueType}>();"
+        ],
+        "description": "New Map"
+    },
+    "Set": {
+        "prefix": "Set",
+        "body": [
+            "Set<${1:Type}> ${2:setName} = new Set<${1:Type}>();"
+        ],
+        "description": "New Set"
+    },
+    "Map From Record List": {
+        "prefix": "mapfromlist",
+        "body": [
+            "Map<Id, ${1:SObjectType}> ${2:mapName} = new Map<Id, ${1:SObjectType}>(${3:recordList});"
+        ],
+        "description": "Map from list of records"
+    },
+    "Set of Ids From Record List": {
+        "prefix": "setids",
+        "body": [
+            "Set<Id> ${1:idSet} = new Map<Id, ${2:SObjectType}>(${3:recordList}).keySet();"
+        ],
+        "description": "Set of Ids from list of records"
+    },
+    "Try Catch": {
+        "prefix": "try",
+        "body": [
+            "try {",
+            "\t$1",
+            "} catch (${2:Exception} ${3:e}) {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Try/catch block"
+    },
+    "Try Finally": {
+        "prefix": "tryf",
+        "body": [
+            "try {",
+            "\t$1",
+            "} finally {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Try/finally block"
+    },
+    "Try Catch Finally": {
+        "prefix": "trycf",
+        "body": [
+            "try {",
+            "\t$1",
+            "} catch (${2:Exception} ${3:e}) {",
+            "\t$4",
+            "} finally {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Try/catch/finally block"
+    },
+    "Throw": {
+        "prefix": "throw",
+        "body": [
+            "throw new ${1:ExceptionType}(${0:message});"
+        ],
+        "description": "Throw exception"
+    },
+    "SOQL Query": {
+        "prefix": "soql",
+        "body": [
+            "[SELECT ${1:fields} FROM ${2:SObject}${3: WHERE ${4:condition}}]"
+        ],
+        "description": "Inline SOQL query"
+    },
+    "SOQL To List": {
+        "prefix": "soqllist",
+        "body": [
+            "List<${1:SObjectType}> ${2:records} = [SELECT ${3:fields} FROM ${1:SObjectType}${4: WHERE ${5:condition}}];"
+        ],
+        "description": "SOQL query assigned to list"
+    },
+    "SOQL To Map": {
+        "prefix": "soqlmap",
+        "body": [
+            "Map<Id, ${1:SObjectType}> ${2:recordMap} = new Map<Id, ${1:SObjectType}>([SELECT ${3:fields} FROM ${1:SObjectType}${4: WHERE ${5:condition}}]);"
+        ],
+        "description": "SOQL query assigned to map"
+    },
+    "SOQL Count": {
+        "prefix": "soqlcount",
+        "body": [
+            "Integer ${1:count} = [SELECT COUNT() FROM ${2:SObject}${3: WHERE ${4:condition}}];"
+        ],
+        "description": "SOQL count query"
+    },
+    "System Debug": {
+        "prefix": "debug",
+        "body": [
+            "System.debug($0);"
+        ],
+        "description": "System.debug"
+    },
+    "System Debug Pretty": {
+        "prefix": "debugp",
+        "body": [
+            "System.debug(JSON.serializePretty($0));"
+        ],
+        "description": "System.debug with JSON.serializePretty"
+    },
+    "Test Method": {
+        "prefix": "testmethod",
+        "body": [
+            "@IsTest",
+            "static void ${1:testMethodName}() {",
+            "\t$2",
+            "",
+            "\tTest.startTest();",
+            "\t$0",
+            "\tTest.stopTest();",
+            "}"
+        ],
+        "description": "Test method with startTest/stopTest"
+    },
+    "Test Setup": {
+        "prefix": "testsetup",
+        "body": [
+            "@TestSetup",
+            "static void setup() {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Test setup method"
+    },
+    "System RunAs": {
+        "prefix": "runas",
+        "body": [
+            "System.runAs(${1:user}) {",
+            "\t$0",
+            "}"
+        ],
+        "description": "System.runAs block"
+    },
+    "Assert Are Equal": {
+        "prefix": "asserteq",
+        "body": [
+            "Assert.areEqual(${1:expected}, ${2:actual}, ${3:message});"
+        ],
+        "description": "Assert.areEqual"
+    },
+    "Assert Are Not Equal": {
+        "prefix": "assertneq",
+        "body": [
+            "Assert.areNotEqual(${1:expected}, ${2:actual}, ${3:message});"
+        ],
+        "description": "Assert.areNotEqual"
+    },
+    "Assert Is True": {
+        "prefix": "asserttrue",
+        "body": [
+            "Assert.isTrue(${1:condition}, ${2:message});"
+        ],
+        "description": "Assert.isTrue"
+    },
+    "AuraEnabled Method": {
+        "prefix": "auraenabled",
+        "body": [
+            "@AuraEnabled",
+            "${1|public,global|} static ${2:String} ${3:methodName}() {",
+            "\ttry {",
+            "\t\t$0",
+            "\t} catch (Exception e) {",
+            "\t\tthrow new AuraHandledException(e.getMessage());",
+            "\t}",
+            "}"
+        ],
+        "description": "AuraEnabled method with exception handling"
+    },
+    "Future Method": {
+        "prefix": "future",
+        "body": [
+            "@Future",
+            "public static void ${1:methodName}() {",
+            "\t$0",
+            "}"
+        ],
+        "description": "Future method"
+    },
+    "Invocable Method": {
+        "prefix": "invocable",
+        "body": [
+            "@InvocableMethod(label='${1:Label}' description='${2:Description}')",
+            "public static List<${3:Type}> ${4:methodName}(List<${5:InputType}> ${6:inputs}) {",
+            "\t$0",
+            "}"
+        ],
+        "description": "InvocableMethod"
+    },
+    "Mock Callout": {
+        "prefix": "mockcallout",
+        "body": [
+            "global HttpResponse respond(HttpRequest req) {",
+            "\tHttpResponse res = new HttpResponse();",
+            "\tres.setHeader('Content-Type', '${1:application/json}');",
+            "\tres.setBody('${2:responseBody}');",
+            "\tres.setStatusCode(${3:200});",
+            "\treturn res;$0",
+            "}"
+        ],
+        "description": "HttpCalloutMock respond method"
+    },
+    "Instance Of": {
+        "prefix": "instanceof",
+        "body": [
+            "if (${1:variable} instanceof ${2:Type}) {",
+            "\t${2:Type} ${3:typed} = (${2:Type}) ${1:variable};",
+            "\t$0",
+            "}"
+        ],
+        "description": "instanceof check with downcast"
+    },
+    "JSON Serialize": {
+        "prefix": "jsonser",
+        "body": [
+            "String ${1:jsonString} = JSON.serialize(${2:objectToSerialize});"
+        ],
+        "description": "JSON.serialize"
+    },
+    "JSON Deserialize": {
+        "prefix": "jsondeser",
+        "body": [
+            "${1:Type} ${2:result} = (${1:Type}) JSON.deserialize(${3:jsonString}, ${1:Type}.class);"
+        ],
+        "description": "JSON.deserialize with cast"
+    },
+    "Database Insert": {
+        "prefix": "dmlinsert",
+        "body": [
+            "List<Database.SaveResult> ${1:saveResults} = Database.insert(${2:records}, ${3:allOrNone});"
+        ],
+        "description": "Database.insert with SaveResult"
+    },
+    "Database Update": {
+        "prefix": "dmlupdate",
+        "body": [
+            "List<Database.SaveResult> ${1:saveResults} = Database.update(${2:records}, ${3:allOrNone});"
+        ],
+        "description": "Database.update with SaveResult"
+    }
+}
