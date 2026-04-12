@@ -1,3 +1,4 @@
 grammars/
 node_modules/
 target/
+extension.wasm
